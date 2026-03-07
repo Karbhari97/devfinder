@@ -1,0 +1,14 @@
+const express = require("express");
+
+const app = express();
+const port = 3000;
+
+
+app.listen(port, () => {
+  console.log(`Server is runing on port ${port}...`);
+});
+
+app.use("/get",(req, res) => {
+  res.send("Hello from server>>>");
+});
+
