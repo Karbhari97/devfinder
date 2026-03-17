@@ -1,0 +1,75 @@
+const express = require("express");
+const { signupValidator } = require("../utils/helper/validator");
+const User = require("../model/user");
+const bcrypt = require("bcrypt");
+
+const userAuthRouter = express.Router();
+
+userAuthRouter.post("/signUp", async (req, res) => {
+  try {
+    const isValidData = signupValidator(req);
+
+    if (isValidData) {
+      const {
+        firstName,
+        lastName,
+        emailId,
+        password,
+        about,
+        photoUrl,
+        age,
+        gender,
+      } = req.body;
+
+      const passwordHash = await bcrypt.hash(password, 10);
+
+      const user = new User({
+        firstName,
+        lastName,
+        emailId,
+        password: passwordHash,
+        about,
+        photoUrl,
+        age,
+        gender,
+      });
+      await user.save();
+      res.status(200).json(`Hi ${firstName} you have signed up succesfully !!`);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+userAuthRouter.post("/login", async (req, res) => {
+  const { emailId, password } = req.body;
+  try {
+    const user = await User.findOne({ emailId: emailId });
+    if (user) {
+      const isValidPassword = await user.validatePassword(password);
+      if (isValidPassword) {
+        const token = await user.getJWT();
+        res.cookie("token", token);
+        res.send("logged in succesfully");
+      } else {
+        return res.status(404).json({ message: "invalid credentials" });
+      }
+    } else {
+      return res.status(404).json({ message: "user not found" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+});
+
+userAuthRouter.post("/logout", async (req, res) => {
+  res.cookie("token", null, {
+    expires: new Date(Date.now()),
+  });
+  res.send("logout succesfully");
+});
+module.exports = {
+  userAuthRouter,
+};
