@@ -85,13 +85,13 @@ connectionRouter.post(
       const { status, requestId } = req.params;
       const allowed_status = ["accepted", "rejected"];
       const loggedInUser = req.user._id;
-      console.log("logged", loggedInUser);
       if (!allowed_status.includes(status)) {
         return res
           .status(400)
           .json({ message: `bad request ${status} not allowed` });
       }
 
+      
       const isRequestPresent = await ConnectionRequestModel.findOne({
         _id: requestId,
       });
