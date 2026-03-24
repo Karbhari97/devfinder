@@ -3,6 +3,7 @@ const { userAuth } = require("../middlewares/userAuth");
 const ConnectionRequestModel = require("../model/request");
 const userRequestRouter = express.Router();
 const Allowed_Field_String = "firstName lastName age gender about photoUrl";
+const User = require("../model/user");
 
 //Get All received requests
 userRequestRouter.get("/user/request/received", userAuth, async (req, res) => {
@@ -51,6 +52,36 @@ userRequestRouter.get("/user/connections", userAuth, async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "something went wrong" });
+  }
+});
+
+userRequestRouter.get("/feed", userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+    let connectionRequest = await ConnectionRequestModel.find({
+      $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }],
+    }).select("fromUserId toUserId");
+
+    if (connectionRequest) {
+      const hideConnectionsSet = new Set();
+
+      connectionRequest.forEach((connection) => {
+        hideConnectionsSet.add(connection.fromUserId);
+        hideConnectionsSet.add(connection.toUserId);
+      });
+
+      const users = await User.find({
+        $and: [
+          { _id: { $nin: Array.from(hideConnectionsSet) } },
+          { _id: { $ne: loggedInUser._id } },
+        ],
+      }).select(Allowed_Field_String);
+
+      res.status(200).json({ message: "cards", data: users });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
   }
 });
 

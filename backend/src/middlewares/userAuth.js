@@ -9,13 +9,10 @@ const userAuth = async (req, res, next) => {
 
   try {
     const data = jwt.verify(token, process.env.JWT_SECRET || "SachinJWTSign");
-    console.log("data ------------>", data);
-
     const user = await User.findById(data._id);
     if (!user) {
       return res.status(401).json({ error: "User not found" });
     }
-
     req.user = user;
     next();
   } catch (error) {

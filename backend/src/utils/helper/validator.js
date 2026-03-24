@@ -13,7 +13,7 @@ const signupValidator = (req, res) => {
      console.log(lastName)
     throw new Error("user name can not be empty");
   } else if (age < 18) {
-    throw new Error("please enter valid email addres");
+    throw new Error("please enter valid age ");
   } else if (gender !== "Female" && gender !== "Male" && gender !== "Other") {
     throw new Error("Gender can be Male Female & Others only");
   } else {
