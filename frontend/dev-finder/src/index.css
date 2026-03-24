@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@plugin "daisyui/theme" {
+  name: "mytheme";
+  default: true;
+  /* Set as the default theme */
+  prefersdark: true;
+  /* Enable dark mode preference */
+  color-scheme: dark;
+  /* Browser UI color scheme */
+
+  --color-base-100: #0a0a0f;
+  /* From --bg */
+  --color-base-200: #13131a;
+  /* From --surface and --card-bg */
+  --color-base-300: #1c1c27;
+  /* From --surface2 */
+  --color-base-content: #f0f0f8;
+  /* From --text */
+  --color-primary: #7c6aff;
+  /* From --accent */
+  --color-primary-content: #f0f0f8;
+  /* Light text on primary (reuse --text) */
+  --color-secondary: #ff6a8e;
+  /* From --accent2 */
+  --color-secondary-content: #f0f0f8;
+  /* Light text on secondary */
+  --color-accent: #6affb8;
+  /* From --accent3 */
+  --color-accent-content: #0a0a0f;
+  /* Dark text on accent (reuse --bg) */
+  --color-neutral: #2a2a3a;
+  /* From --border */
+  --color-neutral-content: #6b6b88;
+  /* From --muted */
+  --color-info: #7c6aff;
+  /* Reuse primary for info */
+  --color-info-content: #f0f0f8;
+  --color-success: #6affb8;
+  /* Reuse accent for success */
+  --color-success-content: #0a0a0f;
+  --color-warning: #ff6a8e;
+  /* Reuse secondary for warning */
+  --color-warning-content: #0a0a0f;
+  --color-error: #ff6a8e;
+  /* Reuse secondary for error */
+  --color-error-content: #f0f0f8;
+
+  /* Border radius (keep defaults or customize) */
+  --radius-selector: 1rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+
+  /* Base sizes (keep defaults) */
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  /* Border size */
+  --border: 1px;
+
+  /* Effects */
+  --depth: 1;
+  --noise: 0;
+}
+
+body {
+  background: var(--color-base-100);
+  color: var(--color-base-content);
+  font-family: 'DM Mono', monospace;
+  overflow-x: hidden;
+  cursor: none;
+}
