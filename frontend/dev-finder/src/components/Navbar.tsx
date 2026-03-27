@@ -1,5 +1,7 @@
 import  '../styles/Navbar.module.style.css'
+import { useNavigate } from 'react-router-dom'
 const Navbar = () => {
+  const navigate = useNavigate();
   return (
 <nav>
   <div className='logo'>dev<span>//</span>finder</div>
@@ -9,7 +11,7 @@ const Navbar = () => {
     <li><a href="#">Projects</a></li>
     <li><a href="#">Pricing</a></li>
   </ul>
-  <button className="nav-cta">Start Matching →</button>
+  <button className="nav-cta" onClick={()=>{navigate('/login')}}>Start Matching →</button>
 </nav>
   )
 }

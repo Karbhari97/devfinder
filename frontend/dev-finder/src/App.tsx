@@ -3,6 +3,11 @@ import Body from "./components/Body";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Profile from "./components/Profile";
+import LoginScreen from "./Login/LoginScree";
+import Navbar from "./components/Navbar";
+import SignupScreen from "./Signup/SignupScreen";
+import Feed from "./Feed/Feed";
+import Main from "./components/Main";
 
 function App() {
 
@@ -44,7 +49,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Body />}>
           <Route path="/profile" element={<Profile />} />
+          <Route path="/feed" element={<Feed/>}/>
+          <Route path="/" element={<Main/>}/>
+          <Route path="/login" element={<LoginScreen />} />
+          <Route path="/signup" element={<SignupScreen />} />
         </Route>
+         
       </Routes>
     </div>
   );
