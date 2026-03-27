@@ -8,6 +8,7 @@ const { userAuth } = require("./middlewares/userAuth");
 const { userAuthRouter } = require("./routes/userRoute");
 const { connectionRouter } = require("./routes/connectionRouter");
 const userRequestRouter = require("./routes/userRequestRouter");
+const cors = require("cors");
 
 const app = express();
 const PORT = 3000;
@@ -23,7 +24,12 @@ const PORT = 3000;
     console.log("Error while connceting to the DB", err);
   }
 })();
-
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use("/", userAuthRouter);

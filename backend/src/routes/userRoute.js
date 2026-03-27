@@ -51,7 +51,7 @@ userAuthRouter.post("/login", async (req, res) => {
       if (isValidPassword) {
         const token = await user.getJWT();
         res.cookie("token", token);
-        res.send("logged in succesfully");
+        res.status(200).json(user)
       } else {
         return res.status(404).json({ message: "invalid credentials" });
       }
