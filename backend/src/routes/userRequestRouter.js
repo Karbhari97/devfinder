@@ -2,7 +2,7 @@ const express = require("express");
 const { userAuth } = require("../middlewares/userAuth");
 const ConnectionRequestModel = require("../model/request");
 const userRequestRouter = express.Router();
-const Allowed_Field_String = "firstName lastName age gender about photoUrl";
+const Allowed_Field_String = "firstName lastName age gender about photoUrl skills";
 const User = require("../model/user");
 
 userRequestRouter.get("/profile/view", userAuth, async (req, res) => {

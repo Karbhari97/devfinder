@@ -2,6 +2,7 @@ const express = require("express");
 const { signupValidator } = require("../utils/helper/validator");
 const User = require("../model/user");
 const bcrypt = require("bcrypt");
+const userAuth = require("../middlewares/userAuth");
 
 const userAuthRouter = express.Router();
 
@@ -70,6 +71,29 @@ userAuthRouter.post("/logout", async (req, res) => {
   });
   res.send("logout succesfully");
 });
+
+userAuthRouter.patch("/profile/edit", userAuth, async (req, res) => {
+  try {
+    const isValidData = signupValidator(req);
+    const loggedInUser = req.user;
+
+    if (isValidData) {
+      Object.keys(req.body).forEach((key) => {
+        loggedInUser[key] = req.body[key];
+      });
+
+      await loggedInUser.save();
+
+      res.status(200).json({
+        message: `${loggedInUser.firstName} your profile updated succesfully`,
+        data: loggedInUser,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong", data: error });
+  }
+});
+
 module.exports = {
   userAuthRouter,
 };
