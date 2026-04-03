@@ -2,7 +2,6 @@ import { useState } from "react";
 import "./LoginScreen.module.style.css";
 import { useNavigate } from "react-router-dom";
 import { validateEmail, validatePassword } from "../utils/validations";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../store/userSlice";
 import { loginApi } from "../service";
@@ -12,6 +11,7 @@ function LoginScreen() {
     password: "",
   });
   const [error, setError] = useState({ emailError: "", passwordError: "" });
+  const [validError,setValidError]=useState<boolean>(false)
   const [keep, setKeep] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -46,12 +46,18 @@ function LoginScreen() {
   async function handleSignIn() {
     try {
       const res: any = await loginApi({ emailId: form.email, password: form.password })
-      dispatch(addUser(res));
-      if (res) {
+      console.log(res)
+      if(res.message==="invalid credentials" || res.message ==="user not found"){
+         setValidError(true)
+         return;
+      }
+      if (res.message === "login success") {
+         dispatch(addUser(res.user));
         navigate('/feed')
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error:any) {
+      console.log(error)
+      navigate('/login')
     }
   }
 
@@ -131,6 +137,9 @@ function LoginScreen() {
         >
           Sign In →
         </button>
+        {
+          validError && <span style={{color:"red"}}>Invalid Credentials</span>
+        }
       </div>
 
       <div className="divider" style={{ marginTop: 24 }}>

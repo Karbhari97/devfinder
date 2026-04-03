@@ -1,3 +1,5 @@
 export const endpoints ={
-    login:"/login"
+    login:"/login",
+    logout:'/logout',
+    profileView:"/profile/view"
 }

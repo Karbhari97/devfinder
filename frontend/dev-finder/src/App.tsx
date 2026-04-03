@@ -10,7 +10,7 @@ import Feed from "./Feed/Feed";
 import Main from "./components/Main";
 
 function App() {
-
+ 
   useEffect(() => {
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('cursorRing');
