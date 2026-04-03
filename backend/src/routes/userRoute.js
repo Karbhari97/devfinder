@@ -51,12 +51,12 @@ userAuthRouter.post("/login", async (req, res) => {
       if (isValidPassword) {
         const token = await user.getJWT();
         res.cookie("token", token);
-        res.status(200).json(user)
+        res.status(200).json({ message: "login success", user });
       } else {
-        return res.status(404).json({ message: "invalid credentials" });
+        return res.status(200).json({ message: "invalid credentials" });
       }
     } else {
-      return res.status(404).json({ message: "user not found" });
+      return res.status(200).json({ message: "user not found" });
     }
   } catch (error) {
     console.log(error);

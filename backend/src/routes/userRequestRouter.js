@@ -5,6 +5,11 @@ const userRequestRouter = express.Router();
 const Allowed_Field_String = "firstName lastName age gender about photoUrl";
 const User = require("../model/user");
 
+userRequestRouter.get("/profile/view", userAuth, async (req, res) => {
+  const user = req.user;
+  return res.status(200).json({ user });
+});
+
 //Get All received requests
 userRequestRouter.get("/user/request/received", userAuth, async (req, res) => {
   try {
