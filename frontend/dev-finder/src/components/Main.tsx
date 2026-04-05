@@ -3,14 +3,16 @@ import ProfileCard from "../common/ProfileCard";
 import '../styles/Main.module.style.css'
 import BottomHero from "./BottomHero";
 import ScrollingProfile from "./ScrollingProfile";
+import { useSelector } from "react-redux";
 
 
 const Main = () => {
-    return (
+    const user = useSelector((store:any)=>store.user)
+    return user?.user && (
         <div className="mainContainer">
             <section className="hero">
                 <HeroSection />
-                <ProfileCard />
+                <ProfileCard user={user.user} self={false} />
             </section>
             <BottomHero />
             <ScrollingProfile />

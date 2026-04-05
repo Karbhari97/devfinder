@@ -25,8 +25,8 @@ export const loginApi = async (payload: LoginPayload) => {
   try {
     const response = await axios(config);
     return response?.data;
-  } catch (error:any) {
-    console.log(error)
+  } catch (error: any) {
+    console.log(error);
   }
 };
 
@@ -65,6 +65,59 @@ export const logoutApi = async () => {
     const response = await axios(config);
     return response.data;
   } catch (error: any) {
-    console.log(error)
+    console.log(error);
+  }
+};
+
+export const fetchFeedApi = async () => {
+  let config: AxiosRequestConfig = {
+    baseURL: import.meta.env.VITE_API_URL,
+    url: endpoints.feed,
+    method: "GET",
+    withCredentials: true,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  try {
+    const response = await axios(config);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+interface updateProfileData {
+  firstName?: string;
+  lastName?: string;
+  age?: number;
+  about?: string;
+  gender?: string;
+}
+
+export const updateProfileApi = async (payload: updateProfileData) => {
+  const config: AxiosRequestConfig = {
+    baseURL: import.meta.env.VITE_API_URL,
+    url: endpoints.profileEdit,
+    method: "PATCH",
+    withCredentials: true,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      firstName: payload?.firstName,
+      lastName: payload?.lastName,
+      age: Number(payload?.age),
+      about: payload?.about,
+      gender: payload?.gender,
+    },
+  };
+
+  try {
+    const response = await axios(config);
+    return response.data;
+  } catch (error) {
+    console.log(error);
   }
 };
