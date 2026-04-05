@@ -2,7 +2,7 @@ const express = require("express");
 const { signupValidator } = require("../utils/helper/validator");
 const User = require("../model/user");
 const bcrypt = require("bcrypt");
-const userAuth = require("../middlewares/userAuth");
+const { userAuth } = require("../middlewares/userAuth");
 
 const userAuthRouter = express.Router();
 
@@ -74,22 +74,53 @@ userAuthRouter.post("/logout", async (req, res) => {
 
 userAuthRouter.patch("/profile/edit", userAuth, async (req, res) => {
   try {
-    const isValidData = signupValidator(req);
+    const forbiddenFields = ["emailId", "password"];
+    const allowedFields = [
+      "firstName",
+      "lastName",
+      "about",
+      "photoUrl",
+      "age",
+      "gender",
+    ];
+
+    const bodyKeys = Object.keys(req.body);
+
+    const invalidForbidden = bodyKeys.filter((key) => {
+      return forbiddenFields.includes(key);
+    });
+
+    if (invalidForbidden.length) {
+      return res
+        .status(200)
+        .json({
+          message: `can not update field: ${invalidForbidden.join(",")}`,
+        });
+    }
+
+    const invalidFields = bodyKeys.filter((key) => {
+      return !allowedFields.includes(key);
+    });
+
+    if (invalidFields.length) {
+      return res
+        .status(200)
+        .json({ message: `invalid update field ${invalidFields.join(",")}` });
+    }
     const loggedInUser = req.user;
 
-    if (isValidData) {
-      Object.keys(req.body).forEach((key) => {
-        loggedInUser[key] = req.body[key];
-      });
+    Object.keys(req.body).forEach((key) => {
+      loggedInUser[key] = req.body[key];
+    });
 
-      await loggedInUser.save();
+    await loggedInUser.save();
 
-      res.status(200).json({
-        message: `${loggedInUser.firstName} your profile updated succesfully`,
-        data: loggedInUser,
-      });
-    }
+    res.status(200).json({
+      message: `${loggedInUser.firstName} your profile updated succesfully`,
+      data: loggedInUser,
+    });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Something went wrong", data: error });
   }
 });
